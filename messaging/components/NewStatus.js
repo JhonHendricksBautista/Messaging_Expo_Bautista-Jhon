@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 import {
-  NetInfo, // <-- Imported directly from react-native for older APIs
+  NetInfo,
   Platform,
   StatusBar,
   StyleSheet,
@@ -15,10 +15,7 @@ export default class Status extends React.Component {
   };
 
   componentDidMount() {
-    // 1. Get initial network connectivity when component mounts
     NetInfo.getConnectionInfo().then((status) => {
-      // Per your instructions, status resolves to 'wifi', 'cellular', or 'none'
-      // (Note: We also check status.type just in case your specific RN version returns an object)
       const connectionString = typeof status === 'string' ? status : status.type;
       
       this.setState({
@@ -26,7 +23,6 @@ export default class Status extends React.Component {
       });
     });
 
-    // 2. Add event listener for ongoing connection changes
     this.subscription = NetInfo.addEventListener('connectionChange', (status) => {
       const connectionString = typeof status === 'string' ? status : status.type;
       
@@ -35,9 +31,7 @@ export default class Status extends React.Component {
       });
     });
   }
-
   componentWillUnmount() {
-    // 3. Remove the subscription when the component unmounts
     if (this.subscription && this.subscription.remove) {
       this.subscription.remove();
     }
